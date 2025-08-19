@@ -10,6 +10,7 @@ public class TempTestPlayer : MonoBehaviour
     public Transform groundCheck;
     public float groundCheckRadius = 0.1f;
     public LayerMask groundLayer;
+    public BoxCollider2D player_collider;
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -18,20 +19,19 @@ public class TempTestPlayer : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+	player_collider = GetComponent<BoxCollider2D>();
     }
 
     void Update()
     {
         moveInput = Input.GetAxisRaw("Horizontal");
 
-	//this doesn't do what you think it does
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-
         // Jump
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
 	    Debug.Log("JUMP!");
+	    isGrounded = false;
         }
     }
 
@@ -39,6 +39,14 @@ public class TempTestPlayer : MonoBehaviour
     {
         // Move player
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision){
+	    Debug.Log("Colliding!");
+	    GameObject collision_object = collision.gameObject;
+	    if(collision_object.name == "Floor"){
+		    isGrounded = true;
+	    } 
     }
 
     void OnDrawGizmosSelected()
