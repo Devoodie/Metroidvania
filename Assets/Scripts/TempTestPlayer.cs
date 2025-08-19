@@ -16,6 +16,8 @@ public class TempTestPlayer : MonoBehaviour
     private bool isGrounded;
     private float moveInput;
 
+    private byte jumps = 0;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -27,12 +29,14 @@ public class TempTestPlayer : MonoBehaviour
         moveInput = Input.GetAxisRaw("Horizontal");
 
         // Jump
-        if (Input.GetButtonDown("Jump") && isGrounded == true)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-	    Debug.Log("JUMP!");
-	    isGrounded = false;
-        }
+        if (Input.GetButtonDown("Jump")){
+		if(isGrounded || jumps > 0){
+			if(!isGrounded) jumps -= 1;
+			rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+			Debug.Log("JUMP!");
+			isGrounded = false;
+		}
+	}
     }
 
     void FixedUpdate()
@@ -44,8 +48,10 @@ public class TempTestPlayer : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision){
 	    Debug.Log("Colliding!");
 	    GameObject collision_object = collision.gameObject;
+
 	    if(collision_object.name == "Floor"){
 		    isGrounded = true;
+		    jumps += 1;
 	    } 
     }
 
