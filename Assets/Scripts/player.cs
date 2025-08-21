@@ -1,5 +1,10 @@
 using UnityEngine;
 
+enum state {
+	right, 
+	left
+}
+
 public class TempTestPlayer : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -18,17 +23,41 @@ public class TempTestPlayer : MonoBehaviour
 
     private byte jumps = 0;
 
+    private Animator animator;
+
+    private state direction;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
 	player_collider = GetComponent<BoxCollider2D>();
+	animator = this.GetComponent<Animator>();
     }
 
     void Update()
     {
         moveInput = Input.GetAxisRaw("Horizontal");
+	Debug.Log(moveInput);
 
+	if(moveInput > 0) {
+		if(direction == state.left) {
+			animator.SetTrigger("changed_direction");
+			direction = state.right;
+		} else {
+			animator.SetTrigger("running_right");
+		}
+	} else if (moveInput < 0) {
+		if(direction == state.right) {
+			animator.SetTrigger("changed_direction");
+			direction = state.left;
+		} else {
+			animator.SetTrigger("running_left");
+		}
+	} else {
+		animator.SetTrigger("stopped");
+	}
         // Jump
+	//
         if (Input.GetButtonDown("Jump")){
 		if(isGrounded || jumps > 0){
 			if(!isGrounded) jumps -= 1;
