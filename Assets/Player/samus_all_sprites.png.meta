@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 76e75b854becbd84e9923fbe55b379d5
     internalID: 0
     vertices: []
     indices: 
@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      samus_all_sprites_0: 687503499593972580
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
